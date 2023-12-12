@@ -26,6 +26,7 @@ class MultipleFilesChooser(Gtk.Box):
         self.button.drag_dest_set_target_list(target_list)
         self.button.connect("drag-data-received", self.on_drop_button)
         self.has_files_icon = Gtk.Image.new_from_icon_name("none", 4)
+        self.has_files_icon.set_halign(Gtk.Align.END)
 
         self.add(self.button)
         self.add(self.has_files_icon)
@@ -92,7 +93,11 @@ class MainWindow(Gtk.Assistant):
         self.finalize_selection.set_column_spacing(5)
         self.finalize_selection.set_column_homogeneous(True)
         self.copy_switch_label = Gtk.Label("Copy files to destination")
+        self.copy_switch_label.set_halign(Gtk.Align.START)
         self.copy_files_switch = Gtk.Switch()
+        self.copy_files_switch.set_valign(Gtk.Align.CENTER)
+        self.copy_files_switch.set_halign(Gtk.Align.END)
+        self.copy_files_switch.set_hexpand(False)
         self.choose_destination_button = Gtk.FileChooserButton(action=Gtk.FileChooserAction.SELECT_FOLDER)
         self.choose_destination_button.connect("selection-changed", self.on_destination_changed)
         self.do_button = Gtk.Button.new_with_label("Start hardcoding")
@@ -214,18 +219,20 @@ class MainWindow(Gtk.Assistant):
 
     def insert_here(self, out_file, name, pattern_values):
         # can be an uri, or a regular string for now
+        print("Insert here")
         to_insert = self.to_insert[name]
 
         # TODO: add syntax of arrays if necessary, e.g. count > 1, or array
         for current_file_to_insert in to_insert:
             if current_file_to_insert.startswith("file://"):
                 current_file_to_insert = current_file_to_insert.removeprefix("file://")
-                if pattern_values["type"] == "binary":
-                    self.insert_binary_file(out_file, current_file_to_insert)
-                else:
-                    self.insert_text_file(out_file, current_file_to_insert)
+            
+            if pattern_values["type"] == "binary":
+                self.insert_binary_file(out_file, current_file_to_insert)
             else:
-                out_file.write('"{0}"'.format(current_file_to_insert))
+                self.insert_text_file(out_file, current_file_to_insert)
+
+            # out_file.write('"{0}"'.format(current_file_to_insert))
 
 
         return
