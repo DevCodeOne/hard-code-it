@@ -1,6 +1,14 @@
 1. Scannen
-    - Ausrichtung über Textur
+    - Handheld Rapid Scan mit Kamera-Modul
+    - Texturescan
+    - Ausrichtung: Über Textur
+    - Betriebsmodus: Schnell
+    - Auflösung Medium Details eventuell Niedrige Details
+    - Startknopf auf Scanner betätigen zum Starten
+    - Zweimal Startknopf betätigen um Helligkeit über zwei darunter befindliche Knöpfe anzupassen
 2. Meshen
+    - Punktwolke generieren auf der rechten Seite oben
+    - Modell meshen
     - geschlossener Mesh
 3. In Blender importieren
     - .Mtl und .Obj auswählen

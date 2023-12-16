@@ -3,6 +3,7 @@ import re
 import os.path
 
 from base64 import standard_b64encode
+from shutil import copyfile
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
@@ -244,6 +245,7 @@ class MainWindow(Gtk.Assistant):
 
         # TODO: check destination path not template bath, otherwise it will be overwritten
         out_file = open(os.path.join(self.destination_path, os.path.basename(self.template_path)), "wt")
+        files_to_copy = list()
         
         with open(self.template_path) as template:
             template_file = template.read()
@@ -256,8 +258,16 @@ class MainWindow(Gtk.Assistant):
 
                 patterns[result.group("name")] = {"count" : result.group("count"), "type" : result.group("type")}
                 self.insert_here(out_file, result.group("name"), patterns[result.group("name")])
+                files_to_copy.append(self.to_insert[result.group("name")])
 
             out_file.write(template_file[next_read_begin:len(template_file) - 1])
+
+        if self.copy_files_switch.get_state():
+            print(f"Copying files : %s " % files_to_copy)
+            for pattern_file_list in files_to_copy:
+                for current_file in pattern_file_list:
+                    file_destination = os.path.join(self.destination_path, os.path.basename(current_file))
+                    copyfile(current_file, file_destination)
 
         return
     
